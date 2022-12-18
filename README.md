@@ -403,3 +403,34 @@ Some programmers follow Edsger Dijkstra’s rules of structured programming. Dij
 While we are sympathetic to the goals and disciplines of structured programming, those rules serve little benefit when functions are very small. It is only in larger functions that such rules provide significant benefit.
 
 So if you keep your functions small, then the occasional multiple `return` , `break` , or `continue` statement does no harm and can sometimes even be more expressive than the single-entry, single-exit rule. On the other hand, `goto` only makes sense in large functions, so it should be avoided
+
+
+
+<a name="chapter4">
+<h1>Chapter 4 -  Comments</h1>
+</a>
+
+Nothing can be quite so helpful as a well-placed comment. Nothing can clutter up a module more than frivolous dogmatic comments. Nothing can be quite so damaging as an old comment that propagates lies and misinformation.
+
+If our programming languages were expressive enough, or if we had the talent to subtly wield those languages to express our intent, we would not need comments very much—perhaps not at all.
+
+### Comments Do Not Make Up for Bad Code
+
+Clear and expressive code with few comments is far superior to cluttered and complex code with lots of comments. Rather than spend your time writing the comments that explain the mess you’ve made, spend it cleaning that mess.
+
+### Explain Yourself in Code
+
+```java
+// Check to see if the employee is eligible for full benefits
+if ((employee.flags & HOURLY_FLAG) && (employee.age > 65))
+```
+
+vs
+
+```java
+if (employee.isEligibleForFullBenefits())
+```
+
+### Good Comments
+
+Some comments are necessary or beneficial. However the only truly good comment is the comment you found a way not to write.
