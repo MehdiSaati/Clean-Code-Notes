@@ -434,3 +434,115 @@ if (employee.isEligibleForFullBenefits())
 ### Good Comments
 
 Some comments are necessary or beneficial. However the only truly good comment is the comment you found a way not to write.
+
+
+
+#### Legal Comments
+
+Sometimes our corporate coding standards force us to write certain comments for legal reasons. For example, copyright and authorship statements are necessary and reasonable things to put into a comment at the start of each source file.
+
+#### Informative Comments
+
+It is sometimes useful to provide basic information with a comment. For example, consider this comment that explains the return value of an abstract method:
+
+```java
+// Returns an instance of the Responder being tested.
+protected abstract Responder responderInstance();
+```
+
+A comment like this can sometimes be useful, but it is better to use the name of the function to convey the information where possible. For example, in this case the comment could be made redundant by renaming the function: `responderBeingTested`.
+
+#### Explanation of Intent
+
+Sometimes a comment goes beyond just useful information about the implementation and provides the intent behind a decision. Example:
+
+```java
+public int compareTo(Object o)
+{
+  if(o instanceof WikiPagePath)
+  {
+    WikiPagePath p = (WikiPagePath) o;
+    String compressedName = StringUtil.join(names, "");
+    String compressedArgumentName = StringUtil.join(p.names, "");
+    return compressedName.compareTo(compressedArgumentName);
+  }
+  return 1; // we are greater because we are the right type.
+}
+```
+
+#### Clarification
+
+Sometimes it is just helpful to translate the meaning of some obscure argument or return value into something that's readable. In general it is better to find a way to make that argument or return value clear in its own right; but when its part of the standard library, or in code that you cannot alter, then a helpful clarifying comment can be useful.
+
+#### Warning of concequences
+
+Sometimes it is useful to warn other programmers about certain consequences.
+
+```java
+// Don't run unless you
+// have some time to kill.
+public void _testWithReallyBigFile() {
+  writeLinesToFile(10000000);
+  response.setBody(testFile);
+  response.readyToSend(this);
+  String responseString = output.toString();
+  assertSubString("Content-Length: 1000000000", responseString);
+  assertTrue(bytesSent > 1000000000);
+}
+```
+
+#### TODO Comments
+
+It is sometimes reasonable to leave “To do” notes in the form of //TODO comments. In the
+following case, the TODO comment explains why the function has a degenerate implementation and what that function's future should be.
+
+```java
+//TODO-MdM these are not needed
+// We expect this to go away when we do the checkout model
+protected VersionInfo makeVersion() throws Exception {
+  return null;
+}
+```
+
+TODOs are jobs that the programmer thinks should be done, but for some reason can’t do at the moment. It might be a reminder to delete a deprecated feature or a plea for someone else to look at a problem. It might be a request for someone else to think of a better name or a reminder to make a change that is dependent on a planned event. Whatever else a TODO might be, it is not an excuse to leave bad code in the system.
+
+#### Amplification
+
+A comment may be used to amplify the importance of something that may otherwise seem inconsequential.
+
+```java
+String listItemContent = match.group(3).trim();
+// the trim is real important. It removes the starting
+// spaces that could cause the item to be recognized
+// as another list.
+new ListItemWidget(this, listItemContent, this.level + 1);
+return buildList(text.substring(match.end()));
+```
+
+#### Javadocs in Public APIs
+
+There is nothing quite so helpful and satisfying as a well-described public API. The javadocs for the standard Java library are a case in point. It would be difficult, at best, to write Java programs without them.
+
+### Bad Comments
+
+Most comments fall into this category. Usually they are crutches or excuses for poor code or justifications for insufficient decisions, amounting to little more than the programmer talking to himself.
+
+#### Mumbling
+
+Plopping in a comment just because you feel you should or because the process requires it, is a hack. If you decide to write a comment, then spend the time necessary to make sure it is the best comment you can write. Example:
+
+```java
+public void loadProperties() {
+
+  try {
+    String propertiesPath = propertiesLocation + "/" + PROPERTIES_FILE;
+    FileInputStream propertiesStream = new FileInputStream(propertiesPath);
+    loadedProperties.load(propertiesStream);
+  }
+  catch(IOException e) {
+    // No properties files means all defaults are loaded
+  }
+}
+```
+
+What does that comment in the catch block mean? Clearly meant something to the author, but the meaning not come though all that well. Apparently, if we get an `IOException`, it means that there was no properties file; and in that case all the defaults are loaded. But who loads all the defaults?
