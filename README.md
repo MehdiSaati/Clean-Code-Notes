@@ -733,3 +733,23 @@ HTML in source code comments is an abomination, as you can tell by reading the c
 * </pre>
 */
 ```
+#### Nonlocal Information
+
+If you must write a comment, then make sure it describes the code it appears near. Don't offer systemwide information in the context of a local comment.
+
+#### Too Much Information
+
+Don't put interesting historical discussions or irrelevant descriptions of details into your comments.
+
+#### Inobvious Connection
+
+The connection between a comment and the code it describes should be obvious. If you are going to the trouble to write a comment, then at least you'd like the reader to be able to look at the comment and the code and understand what the comment is talking about
+
+#### Function Headers
+
+Short functions don’t need much description. A well-chosen name for a small function that does one thing is usually better than a comment header.
+
+#### Javadocs in Nonpublic Code
+
+Javadocs are for public APIs, in nonpublic code could be a distraction more than a help.
+
