@@ -546,3 +546,190 @@ public void loadProperties() {
 ```
 
 What does that comment in the catch block mean? Clearly meant something to the author, but the meaning not come though all that well. Apparently, if we get an `IOException`, it means that there was no properties file; and in that case all the defaults are loaded. But who loads all the defaults?
+
+
+#### Redundant Comments
+
+```java
+// Utility method that returns when this.closed is true. Throws an exception
+// if the timeout is reached.
+public synchronized void waitForClose(final long timeoutMillis) throws Exception {
+  if(!closed) {
+    wait(timeoutMillis);
+    if(!closed)
+      throw new Exception("MockResponseSender could not be closed");
+  }
+}
+```
+
+What purpose does this comment serve? It’s certainly not more informative than the code. It does not justify the code, or provide intent or rationale. It is not easier to read than the code. Indeed, it is less precise than the code and entices the reader to accept that lack of precision in lieu of true understanding.
+
+#### Misleading comments
+
+Sometimes, with all the best intentions, a programmer makes a statement in his comments that isn't precise enough to be accurate. Consider for another moment the example of the previous section. The method does not return when `this.closed` becomes `true`. It returns if `this.closed` is `true`; otherwise, it waits for a blind time-out and then throws an exception if `this.closed` is still not true.
+
+#### Mandated Comments
+
+It is just plain silly to have a rule that says that every function must have a javadoc, or every variable must have a comment. Comments like this just clutter up the code, propagate lies, and lend to general confusion and disorganization.
+
+```java
+/**
+*
+* @param title The title of the CD
+* @param author The author of the CD
+* @param tracks The number of tracks on the CD
+* @param durationInMinutes The duration of the CD in minutes
+*/
+public void addCD(String title, String author, int tracks, int durationInMinutes) {
+  CD cd = new CD();
+  cd.title = title;
+  cd.author = author;
+  cd.tracks = tracks;
+  cd.duration = duration;
+  cdList.add(cd);
+}
+```
+
+#### Journal Comments
+
+Sometimes people add a comment to the start of a module every time they edit it. Example:
+
+```java
+* Changes (from 11-Oct-2001)
+* --------------------------
+* 11-Oct-2001 : Re-organised the class and moved it to new package com.jrefinery.date (DG);
+* 05-Nov-2001 : Added a getDescription() method, and eliminated NotableDate class (DG);
+* 12-Nov-2001 : IBD requires setDescription() method, now that NotableDate class is gone (DG); Changed getPreviousDayOfWeek(),
+getFollowingDayOfWeek() and getNearestDayOfWeek() to correct bugs (DG);
+* 05-Dec-2001 : Fixed bug in SpreadsheetDate class (DG);
+```
+
+Today we have source code control systems, we don't need this type of logs.
+
+#### Noise Comments
+
+The comments in the follow examples doesn't provides new information.
+
+```java
+/**
+* Default constructor.
+*/
+protected AnnualDateRule() {
+}
+```
+
+```java
+/** The day of the month. */
+private int dayOfMonth;
+```
+
+Javadocs comments could enter in this category. Many times they are just redundant noisy comments written out of some misplaced desire to provide documentation.
+
+#### Don’t Use a Comment When You Can Use a Function or a Variable
+
+Example:
+
+```java
+// does the module from the global list <mod> depend on the
+// subsystem we are part of?
+if (smodule.getDependSubsystems().contains(subSysMod.getSubSystem()))
+```
+
+vs
+
+```java
+ArrayList moduleDependees = smodule.getDependSubsystems();
+String ourSubSystem = subSysMod.getSubSystem();
+if (moduleDependees.contains(ourSubSystem))
+```
+
+#### Position Markers
+
+This type of comments are noising
+
+```java
+// Actions //////////////////////////////////
+```
+
+#### Closing Brace Comments
+
+Example:
+
+```java
+public class wc {
+  public static void main(String[] args) {
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    String line;
+    int lineCount = 0;
+    int charCount = 0;
+    int wordCount = 0;
+    try {
+      while ((line = in.readLine()) != null) {
+        lineCount++;
+        charCount += line.length();
+        String words[] = line.split("\\W");
+        wordCount += words.length;
+
+      } //while
+      System.out.println("wordCount = " + wordCount);
+      System.out.println("lineCount = " + lineCount);
+      System.out.println("charCount = " + charCount);
+
+    } // try
+    catch (IOException e) {
+      System.err.println("Error:" + e.getMessage());
+
+    } //catch
+
+  } //main
+```
+
+You could break the code in small functions instead to use this type of comments.
+
+#### Attributions and Bylines
+
+Example:
+
+`/* Added by Rick */`
+
+The VCS can manage this information instead.
+
+#### Commented-Out Code
+
+```java
+InputStreamResponse response = new InputStreamResponse();
+response.setBody(formatter.getResultStream(), formatter.getByteCount());
+// InputStream resultsStream = formatter.getResultStream();
+// StreamReader reader = new StreamReader(resultsStream);
+// response.setContent(reader.read(formatter.getByteCount()));
+```
+
+If you don't need anymore, please delete it, you can back later with your VCS if you need it again.
+
+#### HTML Comments
+
+HTML in source code comments is an abomination, as you can tell by reading the code below.
+
+```java
+/**
+* Task to run fit tests.
+* This task runs fitnesse tests and publishes the results.
+* <p/>
+* <pre>
+* Usage:
+* &lt;taskdef name=&quot;execute-fitnesse-tests&quot;
+* classname=&quot;fitnesse.ant.ExecuteFitnesseTestsTask&quot;
+* classpathref=&quot;classpath&quot; /&gt;
+* OR
+* &lt;taskdef classpathref=&quot;classpath&quot;
+* resource=&quot;tasks.properties&quot; /&gt;
+* <p/>
+* &lt;execute-fitnesse-tests
+* suitepage=&quot;FitNesse.SuiteAcceptanceTests&quot;
+* fitnesseport=&quot;8082&quot;
+* resultsdir=&quot;${results.dir}&quot;
+* resultshtmlpage=&quot;fit-results.html&quot;
+* classpathref=&quot;classpath&quot; /&gt;
+* </pre>
+*/
+```
